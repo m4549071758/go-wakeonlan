@@ -15,6 +15,12 @@ type MacAddressRequest struct {
 func main() {
 	// :=で型推論
 	router := gin.Default()
+	router.LoadHTMLGlob("src/*.html")
+	router.Static("/js", "src/js/")
+
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(200, "index.html", gin.H{})
+	})
 
 	router.POST("/mac_address", func(c *gin.Context) {
 		var request MacAddressRequest
