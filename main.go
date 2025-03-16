@@ -41,7 +41,9 @@ func main() {
 
 func SendWakeOnLan(address string) error {
 	if mp, err := wakeonlan.NewMagicPacket(address); err == nil {
-		mp.Send()
+		return mp.Send()
+	} else {
+		return err
 	}
 	/*
 		// UDPの9番ポートへブロードキャスト
