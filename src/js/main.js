@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
             // POSTリクエスト送信
+            // 運用時はサーバーのURLを変更する
             const response = await fetch('http://localhost:8080/mac_address', {
                 method: 'POST',
                 headers: {
