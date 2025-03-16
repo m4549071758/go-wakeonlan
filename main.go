@@ -41,17 +41,9 @@ func main() {
 
 func SendWakeOnLan(address string) error {
 	// UDPの9番ポートへブロードキャスト
-	ra, err := net.ResolveUDPAddr("udp4", "255.255.255.255:9")
-	if err != nil {
-		return err
-	}
-
-	la, err := net.ResolveUDPAddr("udp4", ":0")
-	if err != nil {
-		return err
-	}
-
-	c, err := net.DialUDP("udp4", la, ra)
+	ra, _ := net.ResolveUDPAddr("udp", "255.255.255.255:9")
+	la, _ := net.ResolveUDPAddr("udp", ":0")
+	c, err := net.DialUDP("udp", la, ra)
 	if err != nil {
 		return err
 	}
