@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"net"
 	"net/http"
 
+	"github.com/da-rod/wakeonlan"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,30 +40,35 @@ func main() {
 }
 
 func SendWakeOnLan(address string) error {
-	// UDPの9番ポートへブロードキャスト
-	ra, _ := net.ResolveUDPAddr("udp", "255.255.255.255:9")
-	la, _ := net.ResolveUDPAddr("udp", ":0")
-	c, err := net.DialUDP("udp", la, ra)
-	if err != nil {
+	if mp, err := wakeonlan.NewMagicPacket(address); err == nil {
+		mp.Send()
+	}
+	/*
+		// UDPの9番ポートへブロードキャスト
+		ra, _ := net.ResolveUDPAddr("udp", "255.255.255.255:9")
+		la, _ := net.ResolveUDPAddr("udp", ":0")
+		c, err := net.DialUDP("udp", la, ra)
+		if err != nil {
+			return err
+		}
+		defer c.Close()
+
+		// ParseMAC()で文字列アドレスをバイナリ化
+		hw, err := net.ParseMAC(address)
+		if err != nil {
+			return err
+		}
+
+		// 規則にしたがってマジックパケットを生成
+		packet := []byte{}
+		prefix := []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
+		packet = append(packet, prefix...)
+
+		for i := 0; i < 16; i++ {
+			packet = append(packet, hw...)
+		}
+
+		_, err = c.Write(packet)
 		return err
-	}
-	defer c.Close()
-
-	// ParseMAC()で文字列アドレスをバイナリ化
-	hw, err := net.ParseMAC(address)
-	if err != nil {
-		return err
-	}
-
-	// 規則にしたがってマジックパケットを生成
-	packet := []byte{}
-	prefix := []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
-	packet = append(packet, prefix...)
-
-	for i := 0; i < 16; i++ {
-		packet = append(packet, hw...)
-	}
-
-	_, err = c.Write(packet)
-	return err
+	*/
 }
