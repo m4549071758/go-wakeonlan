@@ -22,6 +22,19 @@ func main() {
 		ctx.HTML(200, "index.html", gin.H{})
 	})
 
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
+
 	router.POST("/mac_address", func(c *gin.Context) {
 		var request MacAddressRequest
 
